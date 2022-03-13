@@ -31,7 +31,7 @@
     p {
       color: var(--gray-100);
       margin-top: 0.5rem;
-      line-height: 1.125rem;
+      font-size: 1.125rem;
     }
 
     .info {
@@ -72,6 +72,17 @@
     &:hover strong {
       color:  var(--pink-600);
     }
+  }
 
+  .loading {
+    margin-top: 2rem;
+    padding-top: 2rem;
+    font-size: 1.125rem;
+    font-weight: 600;
+    color: var(--pink-600);
+
+    &:hover {
+      text-decoration: underline;
+    }
   }
 }
