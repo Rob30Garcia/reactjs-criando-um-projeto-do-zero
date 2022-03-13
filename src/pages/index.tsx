@@ -33,22 +33,70 @@ export default function Home() {
         <title>Home | spacetraveling</title>
       </Head>
 
-      <main>
-        <div>
+      <main className={styles.container}>
+        <div className={styles.posts}>
           <img src="/Logo.svg" alt="logo"/>
 
           <a href="#">
             <strong>Como utilizar Hooks</strong>
             <p>Pensando em sincronização em vez de ciclos de vida</p>
-            <div>
-              <FiCalendar size={20}/>
-              <time>15 Mar 2022</time>
-            </div>
-            <div>
-              <FiUser size={20}/>
-              <time>Joseph Oliveira</time>
+            <div className={styles.info}>
+              <div>
+                <FiCalendar className={styles.icon}/>
+                <time>15 Mar 2022</time>
+              </div>
+              <div>
+                <FiUser className={styles.icon}/>
+                <span>Joseph Oliveira</span>
+              </div>
             </div>
           </a>
+
+          <a href="#">
+            <strong>Criando um app CRA do zero</strong>
+            <p>Tudo sobre como criar a sua primeira aplicação utilizando Create React App</p>
+            <div className={styles.info}>
+              <div>
+                <FiCalendar className={styles.icon}/>
+                <time>19 Abr 2022</time>
+              </div>
+              <div>
+                <FiUser className={styles.icon}/>
+                <span>Danilo Vieira</span>
+              </div>
+            </div>
+          </a>
+
+          <a href="#">
+            <strong>Como utilizar Hooks</strong>
+            <p>Pensando em sincronização em vez de ciclos de vida</p>
+            <div className={styles.info}>
+              <div>
+                <FiCalendar className={styles.icon}/>
+                <time>15 Mar 2022</time>
+              </div>
+              <div>
+                <FiUser className={styles.icon}/>
+                <span>Joseph Oliveira</span>
+              </div>
+            </div>
+          </a>
+
+          <a href="#">
+            <strong>Criando um app CRA do zero</strong>
+            <p>Tudo sobre como criar a sua primeira aplicação utilizando Create React App</p>
+            <div className={styles.info}>
+              <div>
+                <FiCalendar className={styles.icon}/>
+                <time>19 Abr 2022</time>
+              </div>
+              <div>
+                <FiUser className={styles.icon}/>
+                <span>Danilo Vieira</span>
+              </div>
+            </div>
+          </a>
+
         </div>
       </main>
     </>
