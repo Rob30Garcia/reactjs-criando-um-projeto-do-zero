@@ -34,42 +34,6 @@
       font-size: 1.125rem;
     }
 
-    .info {
-      display: flex;
-      margin-top: 1.5rem;
-
-      div {
-        display: flex;
-
-        .icon {
-          width: 20px;
-          height: 20px;
-        }
-
-        time {
-          display: flex;
-          margin-left: 0.5rem;
-          align-items: center;
-          font-size: 1rem;
-          justify-content: center;
-          color: var(--gray-300);
-          text-transform: capitalize;
-        }
-
-        span {
-          display: flex;
-          margin-left: 0.5rem;
-          align-items: center;
-          font-size: 1rem;
-          color: var(--gray-300);
-        }
-
-        & + div {
-          margin-left: 1.5rem;
-        }
-      }
-    }
-
     &:hover strong {
       color:  var(--pink-600);
     }
