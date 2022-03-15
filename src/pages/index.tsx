@@ -32,6 +32,34 @@ interface HomeProps {
 
 export default function Home({ postsPagination }: HomeProps) {
   const [posts, setPosts] = useState<Post[]>(postsPagination.results);
+  const [next_page, setNextPage] = useState<string>(postsPagination.next_page);
+
+  function handleMorePosts() {
+    fetch(next_page)
+      .then(response => {
+        response.json().then(res => {
+          const { results, next_page } = res;
+
+          const morePosts = results.map((post: any) => {
+            return {
+              uid: post.uid,
+              first_publication_date: format(new Date(post.last_publication_date), 'dd MMM yyyy', {
+                locale: ptBR,
+              }),
+              data: {
+                title: post.data.title,
+                subtitle: post.data.subtitle,
+                author: post.data.author
+              }
+            }
+          })
+
+          setPosts([...posts, ...morePosts]);
+          setNextPage(next_page);
+        })
+
+      })
+  }
 
   return (
     <>
@@ -62,9 +90,16 @@ export default function Home({ postsPagination }: HomeProps) {
             ))
           }
 
-          <a className={styles.loading} href="#">
-            Carregar mais posts
-          </a>
+          {
+            next_page &&
+            <button
+              type="button"
+              className={styles.loading}
+              onClick={handleMorePosts}
+            >
+              Carregar mais posts
+            </button>
+          }
 
         </div>
       </main>
@@ -80,6 +115,7 @@ export const getStaticProps: GetStaticProps = async () => {
   ], {
     fetch: ['posts.title', 'posts.subtitle', 'posts.author'],
     pageSize: 1
+
   });
 
   const posts = postsResponse.results.map(post => {
@@ -102,6 +138,7 @@ export const getStaticProps: GetStaticProps = async () => {
         next_page: postsResponse.next_page,
         results: posts
       }
-    }
+    },
+    revalidate: 60*10,
   }
 };
