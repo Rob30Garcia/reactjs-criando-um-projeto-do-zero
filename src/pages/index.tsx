@@ -62,21 +62,6 @@ export default function Home({ postsPagination }: HomeProps) {
             ))
           }
 
-          {/* <a href="#">
-            <strong>Criando um app CRA do zero</strong>
-            <p>Tudo sobre como criar a sua primeira aplicação utilizando Create React App</p>
-            <div className={styles.info}>
-              <div>
-                <FiCalendar className={styles.icon}/>
-                <time>19 Abr 2022</time>
-              </div>
-              <div>
-                <FiUser className={styles.icon}/>
-                <span>Danilo Vieira</span>
-              </div>
-            </div>
-          </a> */}
-
           <a className={styles.loading} href="#">
             Carregar mais posts
           </a>
@@ -94,7 +79,7 @@ export const getStaticProps: GetStaticProps = async () => {
     Prismic.predicates.at('document.type', 'posts')
   ], {
     fetch: ['posts.title', 'posts.subtitle', 'posts.author'],
-    pageSize: 20
+    pageSize: 1
   });
 
   const posts = postsResponse.results.map(post => {
