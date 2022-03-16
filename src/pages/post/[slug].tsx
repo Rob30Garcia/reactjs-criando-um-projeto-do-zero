@@ -1,8 +1,10 @@
 import { GetStaticPaths, GetStaticProps } from 'next';
+import { useRouter } from 'next/router';
 import Head from 'next/head';
 import Header from '../../components/Header';
 import { format } from 'date-fns';
 import ptBR from 'date-fns/locale/pt-BR';
+import Prismic from '@prismicio/client';
 
 import { getPrismicClient } from '../../services/prismic';
 
@@ -32,6 +34,12 @@ interface PostProps {
 }
 
 export default function Post({ post }: PostProps) {
+  const router = useRouter();
+
+  if(router.isFallback) {
+    return <div>Carregando...</div>
+  }
+
   return (
     <>
       <Head>
@@ -67,9 +75,19 @@ export default function Post({ post }: PostProps) {
 }
 
 export const getStaticPaths = async () => {
+  const prismic = getPrismicClient();
+  const posts = await prismic.query<any>([
+    Prismic.predicates.at('document.type', 'posts')
+  ], {
+    fetch: [],
+    pageSize: 100
+  });
+
   return {
-    paths: [],
-    fallback: 'blocking'
+    paths: posts.results.map(post => ({
+      params: { slug: post.uid }
+    })),
+    fallback: true
   }
 };
 
