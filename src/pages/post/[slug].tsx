@@ -58,7 +58,11 @@ export default function Post({ post }: PostProps) {
           <div className={commonStyles.info}>
             <div>
               <FiCalendar className={commonStyles.icon}/>
-              <time>{post.first_publication_date}</time>
+              <time>{
+                format(new Date(post.first_publication_date), 'dd MMM yyyy', {
+                  locale: ptBR,
+                })
+              }</time>
             </div>
             <div>
               <FiUser className={commonStyles.icon}/>
@@ -112,12 +116,22 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
   const prismic = getPrismicClient();
   const response = await prismic.getByUID<any>('posts', String(slug), {});
 
+  if(!response) {
+    return {
+      redirect:{
+        destination: '/',
+        permanent: false
+      }
+    }
+  }
+
   const post = {
-    first_publication_date: format(new Date(response.last_publication_date), 'dd MMM yyyy', {
-      locale: ptBR,
-    }),
+    uid: response.uid,
+    first_publication_date: response.first_publication_date,
+    last_publication_date: response.last_publication_date,
     data: {
       title: response.data.title,
+      subtitle: response.data.subtitle,
       banner: {
         url: response.data.banner.url,
       },
@@ -129,6 +143,7 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
   return {
     props: {
       post
-    }
+    },
+    revalidate: 60 * 10,
   }
 };
