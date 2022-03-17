@@ -11,6 +11,7 @@ import { getPrismicClient } from '../../services/prismic';
 import commonStyles from '../../styles/common.module.scss';
 import styles from './post.module.scss';
 import { FiCalendar, FiClock, FiUser } from 'react-icons/fi';
+import { RichText } from 'prismic-dom';
 
 interface Post {
   first_publication_date: string | null;
@@ -67,6 +68,19 @@ export default function Post({ post }: PostProps) {
               <FiClock className={commonStyles.icon}/>
               <span>4 min</span>
             </div>
+          </div>
+
+          <div className={styles.content}>
+            {
+              post.data.content.map(content => (
+                <>
+                  <h2>{content.heading}</h2>
+                  <div
+                    dangerouslySetInnerHTML={{ __html: RichText.asHtml(content.body)}}
+                  />
+                </>
+              ))
+            }
           </div>
         </article>
       </main>
