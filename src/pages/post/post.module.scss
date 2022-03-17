@@ -6,7 +6,7 @@
   }
 
   .post {
-    max-width: 1120px;
+    max-width: 720px;
     margin: 5rem auto;
     padding: 0 2rem;
 
@@ -14,6 +14,40 @@
       font-size: 3rem;
       line-height: 3.265rem;
       font-weight: 900;
+    }
+
+    .content {
+      max-width: 720px;
+      margin-top: 4rem;
+
+      h2 {
+        font-size: 2.25rem;
+        font-weight: 700;
+      }
+
+      .postContent {
+        margin-top: 2rem;
+        line-height: 2rem;
+        font-size: 1.125rem;
+        color: var(--gray-100);
+        text-align: justify;
+
+        p, ul {
+          margin: 1.5rem 0;
+        }
+
+        strong {
+          color: var(--gray-10);
+        }
+
+        ul {
+          padding-left: 1.5rem;
+
+          li {
+            margin: 0.5rem 0;
+          }
+        }
+      }
     }
   }
 }

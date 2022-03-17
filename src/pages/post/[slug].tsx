@@ -80,6 +80,7 @@ export default function Post({ post }: PostProps) {
                 <>
                   <h2>{content.heading}</h2>
                   <div
+                    className={styles.postContent}
                     dangerouslySetInnerHTML={{ __html: RichText.asHtml(content.body)}}
                   />
                 </>
