@@ -35,7 +35,7 @@ export default function Home({ postsPagination }: HomeProps) {
   const [posts, setPosts] = useState<Post[]>(postsPagination.results);
   const [next_page, setNextPage] = useState<string>(postsPagination.next_page);
 
-  function handleMorePosts() {
+  async function handleMorePosts(): Promise<void> {
     fetch(next_page)
       .then(response => {
         response.json().then(res => {
@@ -44,9 +44,7 @@ export default function Home({ postsPagination }: HomeProps) {
           const morePosts = results.map((post: any) => {
             return {
               uid: post.uid,
-              first_publication_date: format(new Date(post.last_publication_date), 'dd MMM yyyy', {
-                locale: ptBR,
-              }),
+              first_publication_date: post.first_publication_date,
               data: {
                 title: post.data.title,
                 subtitle: post.data.subtitle,
