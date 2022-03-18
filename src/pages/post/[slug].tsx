@@ -12,6 +12,7 @@ import commonStyles from '../../styles/common.module.scss';
 import styles from './post.module.scss';
 import { FiCalendar, FiClock, FiUser } from 'react-icons/fi';
 import { RichText } from 'prismic-dom';
+import { useEffect, useState } from 'react';
 
 interface Post {
   first_publication_date: string | null;
@@ -35,11 +36,25 @@ interface PostProps {
 }
 
 export default function Post({ post }: PostProps) {
+  const [ minutes, setMinutes ] = useState(4);
   const router = useRouter();
 
   if(router.isFallback) {
     return <div>Carregando...</div>
   }
+
+  useEffect(() => {
+    const wordForMinute = 200;
+    const text = post.data.content.reduce((acc, elem) => {
+      acc = acc + elem.heading.toString().split(' ').length;
+      acc = acc + RichText.asText(elem.body).split(' ').length;
+
+      return acc;
+    }, 0);
+
+    const read = Math.ceil(text/wordForMinute);
+    setMinutes(read);
+  }, []);
 
   return (
     <>
@@ -70,20 +85,20 @@ export default function Post({ post }: PostProps) {
             </div>
             <div>
               <FiClock className={commonStyles.icon}/>
-              <span>4 min</span>
+              <span>{minutes} min</span>
             </div>
           </div>
 
           <div className={styles.content}>
             {
-              post.data.content.map(content => (
-                <>
+              post.data.content.map((content, index) => (
+                <div key={index}>
                   <h2>{content.heading}</h2>
                   <div
                     className={styles.postContent}
                     dangerouslySetInnerHTML={{ __html: RichText.asHtml(content.body)}}
                   />
-                </>
+                </div>
               ))
             }
           </div>
@@ -95,7 +110,7 @@ export default function Post({ post }: PostProps) {
 
 export const getStaticPaths = async () => {
   const prismic = getPrismicClient();
-  const posts = await prismic.query<any>([
+  const posts = await prismic.query([
     Prismic.predicates.at('document.type', 'posts')
   ], {
     fetch: [],
@@ -115,7 +130,7 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
 
 
   const prismic = getPrismicClient();
-  const response = await prismic.getByUID<any>('posts', String(slug), {});
+  const response = await prismic.getByUID('posts', String(slug), {});
 
   if(!response) {
     return {
@@ -145,6 +160,6 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
     props: {
       post
     },
-    revalidate: 60 * 10,
+    revalidate: 60 * 5,
   }
 };
