@@ -14,6 +14,7 @@ import { FiCalendar, FiClock, FiUser } from 'react-icons/fi';
 import { RichText } from 'prismic-dom';
 import { useEffect, useState } from 'react';
 import Comment from '../../components/Comment';
+import Link from 'next/link';
 
 interface Post {
   first_publication_date: string | null;
@@ -34,9 +35,13 @@ interface Post {
 
 interface PostProps {
   post: Post;
+  preview: boolean;
 }
 
-export default function Post({ post }: PostProps) {
+export default function Post({
+  post,
+  preview
+}: PostProps) {
   const [ minutes, setMinutes ] = useState(4);
   const router = useRouter();
 
@@ -108,6 +113,15 @@ export default function Post({ post }: PostProps) {
 
       <footer className={styles.footer}>
         <Comment />
+        {
+          preview && (
+            <aside>
+              <Link href="/api/exit-preview">
+                <a className={commonStyles.preview}>Sair do modo Preview</a>
+              </Link>
+            </aside>
+          )
+        }
       </footer>
     </>
   );
@@ -130,12 +144,17 @@ export const getStaticPaths = async () => {
   }
 };
 
-export const getStaticProps: GetStaticProps = async ({ params }) => {
+export const getStaticProps: GetStaticProps = async ({
+  params,
+  preview = false,
+  previewData
+}) => {
   const { slug } = params;
 
-
   const prismic = getPrismicClient();
-  const response = await prismic.getByUID('posts', String(slug), {});
+  const response = await prismic.getByUID('posts', String(slug), {
+    ref: previewData?.ref ?? null,
+  });
 
   if(!response) {
     return {
@@ -163,7 +182,8 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
 
   return {
     props: {
-      post
+      post,
+      preview,
     },
     revalidate: 60 * 5,
   }
