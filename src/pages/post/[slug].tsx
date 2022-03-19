@@ -104,6 +104,10 @@ export default function Post({ post }: PostProps) {
           </div>
         </article>
       </main>
+
+      <footer className={styles.footer}>
+        <h1>Olá</h1>
+      </footer>
     </>
   );
 }
