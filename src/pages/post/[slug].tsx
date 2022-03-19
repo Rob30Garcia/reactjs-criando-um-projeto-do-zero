@@ -13,6 +13,7 @@ import styles from './post.module.scss';
 import { FiCalendar, FiClock, FiUser } from 'react-icons/fi';
 import { RichText } from 'prismic-dom';
 import { useEffect, useState } from 'react';
+import Comment from '../../components/Comment';
 
 interface Post {
   first_publication_date: string | null;
@@ -106,7 +107,7 @@ export default function Post({ post }: PostProps) {
       </main>
 
       <footer className={styles.footer}>
-        <h1>Olá</h1>
+        <Comment />
       </footer>
     </>
   );
