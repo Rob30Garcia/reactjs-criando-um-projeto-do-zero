@@ -17,6 +17,7 @@ import Comment from '../../components/Comment';
 import Link from 'next/link';
 
 interface Post {
+  uid?: string;
   first_publication_date: string | null;
   data: {
     title: string;
@@ -35,11 +36,16 @@ interface Post {
 
 interface PostProps {
   post: Post;
+  navigation: {
+    prevPost: Post;
+    nextPost: Post;
+  };
   preview: boolean;
 }
 
 export default function Post({
   post,
+  navigation,
   preview
 }: PostProps) {
   const [ minutes, setMinutes ] = useState(4);
@@ -113,22 +119,30 @@ export default function Post({
 
       <footer className={styles.footer}>
         <section>
-          <div className={styles.navigation}>
-            <p>Como Utilizar Hooks</p>
-            <Link href="/">
-              <a>
-                Post anterior
-              </a>
-            </Link>
-          </div>
-          <div className={styles.navigation}>
-            <p>Criando um app CRA do Zero</p>
-            <Link href="/">
-              <a>
-                Próximo post
-              </a>
-            </Link>
-          </div>
+          {
+            navigation.prevPost && (
+              <div className={styles.navigation}>
+                <p>{navigation.prevPost.data.title}</p>
+                <Link href={`/post/${navigation.prevPost.uid}`}>
+                  <a>
+                    Post anterior
+                  </a>
+                </Link>
+              </div>
+            )
+          }
+          {
+            navigation.nextPost && (
+              <div className={styles.navigation}>
+                <p>{navigation.nextPost.data.title}</p>
+                <Link href={`/post/${navigation.nextPost.uid}`}>
+                  <a>
+                    Próximo post
+                  </a>
+                </Link>
+              </div>
+            )
+          }
         </section>
         <Comment />
         {
@@ -145,7 +159,7 @@ export default function Post({
   );
 }
 
-export const getStaticPaths = async () => {
+export const getStaticPaths: GetStaticPaths = async () => {
   const prismic = getPrismicClient();
   const posts = await prismic.query([
     Prismic.predicates.at('document.type', 'posts')
@@ -174,6 +188,23 @@ export const getStaticProps: GetStaticProps = async ({
     ref: previewData?.ref ?? null,
   });
 
+  const nextPost = await prismic.query([
+    Prismic.predicates.at('document.type', 'posts')
+  ], {
+    pageSize: 1,
+    after: response.id,
+    orderings: '[document.first_publication_date]'
+  });
+
+  const prevPost = await prismic.query([
+    Prismic.predicates.at('document.type', 'posts')
+  ], {
+    pageSize: 1,
+    after: response.id,
+    orderings: '[document.last_publication_date desc]'
+  });
+
+
   if(!response) {
     return {
       redirect:{
@@ -201,6 +232,10 @@ export const getStaticProps: GetStaticProps = async ({
   return {
     props: {
       post,
+      navigation:  {
+        prevPost: prevPost?.results[0] ?? null,
+        nextPost: nextPost?.results[0] ?? null,
+      },
       preview,
     },
     revalidate: 60 * 5,
