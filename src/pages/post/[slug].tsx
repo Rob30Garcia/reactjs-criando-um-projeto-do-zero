@@ -112,6 +112,24 @@ export default function Post({
       </main>
 
       <footer className={styles.footer}>
+        <section>
+          <div className={styles.navigation}>
+            <p>Como Utilizar Hooks</p>
+            <Link href="/">
+              <a>
+                Post anterior
+              </a>
+            </Link>
+          </div>
+          <div className={styles.navigation}>
+            <p>Criando um app CRA do Zero</p>
+            <Link href="/">
+              <a>
+                Próximo post
+              </a>
+            </Link>
+          </div>
+        </section>
         <Comment />
         {
           preview && (

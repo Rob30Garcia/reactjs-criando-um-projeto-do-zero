@@ -57,4 +57,29 @@
   margin: 5rem auto;
   padding: 3rem 0;
   border-top: 1px solid rgba(215, 215,215,0.1);
+
+  section {
+    display: flex;
+    margin-bottom: 5rem;
+    align-items: center;
+    justify-content: space-between;
+
+    .navigation {
+      p {
+        font-size: 1.125rem;
+        line-height: 1.375rem;
+        margin-bottom: 0.5rem;
+      }
+
+      a {
+        font-size: 1rem;
+        color: var(--pink-600);
+        transition: filter 0 0.2s;
+
+        &:hover {
+          filter: brightness(0.8);
+        }
+      }
+    }
+  }
 }
