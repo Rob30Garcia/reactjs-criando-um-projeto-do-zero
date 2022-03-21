@@ -10,10 +10,15 @@
     margin: 5rem auto;
     padding: 0 2rem;
 
-    h1 {
+    > h1 {
       font-size: 3rem;
       line-height: 3.265rem;
       font-weight: 900;
+    }
+
+    > span {
+      font-style: italic;
+      color: var(--gray-300);
     }
 
     .content {
@@ -79,10 +84,10 @@
         &:hover {
           filter: brightness(0.8);
         }
-      }
 
-      & + div {
-        text-align: right;
+        & + div {
+          text-align: right;
+        }
       }
     }
   }

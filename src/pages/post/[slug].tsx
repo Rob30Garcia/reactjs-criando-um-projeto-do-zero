@@ -19,6 +19,7 @@ import Link from 'next/link';
 interface Post {
   uid?: string;
   first_publication_date: string | null;
+  last_publication_date: string | null;
   data: {
     title: string;
     banner: {
@@ -49,6 +50,8 @@ export default function Post({
   preview
 }: PostProps) {
   const [ minutes, setMinutes ] = useState(4);
+  const [ isEdited, setIsEdited ] = useState(false);
+  const [ timeEdited, setTimeEdited ] = useState('');
   const router = useRouter();
 
   if(router.isFallback) {
@@ -56,6 +59,19 @@ export default function Post({
   }
 
   useEffect(() => {
+    const isEdited = post.first_publication_date === post.last_publication_date;
+    if(!isEdited) {
+      const dateEdited = format(
+        new Date(post.last_publication_date),
+        "'* editado em' dd MMM yyyy', às' HH':'mm",
+        {
+          locale: ptBR,
+        }
+      );
+      setIsEdited(true);
+      setTimeEdited(dateEdited);
+    }
+
     const wordForMinute = 200;
     const text = post.data.content.reduce((acc, elem) => {
       acc = acc + elem.heading.toString().split(' ').length;
@@ -66,7 +82,7 @@ export default function Post({
 
     const read = Math.ceil(text/wordForMinute);
     setMinutes(read);
-  }, []);
+  }, [post]);
 
   return (
     <>
@@ -100,6 +116,10 @@ export default function Post({
               <span>{minutes} min</span>
             </div>
           </div>
+
+          {isEdited && (
+            <span>{timeEdited}</span>
+          )}
 
           <div className={styles.content}>
             {
