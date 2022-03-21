@@ -70,6 +70,9 @@ export default function Post({
       );
       setIsEdited(true);
       setTimeEdited(dateEdited);
+    } else {
+      setIsEdited(false);
+      setTimeEdited('');
     }
 
     const wordForMinute = 200;
@@ -82,7 +85,7 @@ export default function Post({
 
     const read = Math.ceil(text/wordForMinute);
     setMinutes(read);
-  }, [post]);
+  }, [post.uid]);
 
   return (
     <>
